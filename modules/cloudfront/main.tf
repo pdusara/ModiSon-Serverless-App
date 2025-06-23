@@ -15,9 +15,6 @@ resource "aws_cloudfront_distribution" "modison_site" {
     domain_name = var.s3_bucket_domain
     origin_id   = "S3Origin"
 
-    s3_origin_config {
-      origin_access_identity = ""
-    }
     origin_access_control_id = aws_cloudfront_origin_access_control.modison_oac.id
   }
 

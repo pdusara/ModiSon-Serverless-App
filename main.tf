@@ -15,9 +15,8 @@ module "aws_cognito" {
 }
 
 module "s3_bucket" {
-  source                      = "./modules/s3_bucket"
-  cloudfront_oai              = module.cloudfront.cloudfront_oai
-  cloudfront_distribution_id  = module.cloudfront.distribution_id
+  source                     = "./modules/s3_bucket"
+  cloudfront_distribution_id = module.cloudfront.distribution_id
 }
 
 module "cloudfront" {
