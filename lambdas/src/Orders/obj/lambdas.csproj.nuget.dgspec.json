@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\pritz\\Development\\ModisonUK\\lambdas\\src\\Orders\\lambdas.csproj": {}
+    "C:\\Users\\pritz\\Development\\ModiSon-Serverless-App\\lambdas\\src\\Orders\\lambdas.csproj": {}
   },
   "projects": {
-    "C:\\Users\\pritz\\Development\\ModisonUK\\lambdas\\src\\Orders\\lambdas.csproj": {
+    "C:\\Users\\pritz\\Development\\ModiSon-Serverless-App\\lambdas\\src\\Orders\\lambdas.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pritz\\Development\\ModisonUK\\lambdas\\src\\Orders\\lambdas.csproj",
+        "projectUniqueName": "C:\\Users\\pritz\\Development\\ModiSon-Serverless-App\\lambdas\\src\\Orders\\lambdas.csproj",
         "projectName": "lambdas",
-        "projectPath": "C:\\Users\\pritz\\Development\\ModisonUK\\lambdas\\src\\Orders\\lambdas.csproj",
+        "projectPath": "C:\\Users\\pritz\\Development\\ModiSon-Serverless-App\\lambdas\\src\\Orders\\lambdas.csproj",
         "packagesPath": "C:\\Users\\pritz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pritz\\Development\\ModisonUK\\lambdas\\src\\Orders\\obj\\",
+        "outputPath": "C:\\Users\\pritz\\Development\\ModiSon-Serverless-App\\lambdas\\src\\Orders\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pritz\\AppData\\Roaming\\NuGet\\NuGet.Config"
