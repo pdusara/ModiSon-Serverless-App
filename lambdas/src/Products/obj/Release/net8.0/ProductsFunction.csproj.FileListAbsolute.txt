@@ -1,0 +1,5 @@
+C:\Users\pritz\Development\ModisonUK\lambdas\src\Products\obj\Release\net8.0\ProductsFunction.csproj.AssemblyReference.cache
+C:\Users\pritz\Development\ModisonUK\lambdas\src\Products\obj\Release\net8.0\ProductsFunction.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pritz\Development\ModisonUK\lambdas\src\Products\obj\Release\net8.0\ProductsFunction.AssemblyInfoInputs.cache
+C:\Users\pritz\Development\ModisonUK\lambdas\src\Products\obj\Release\net8.0\ProductsFunction.AssemblyInfo.cs
+C:\Users\pritz\Development\ModisonUK\lambdas\src\Products\obj\Release\net8.0\ProductsFunction.csproj.CoreCompileInputs.cache

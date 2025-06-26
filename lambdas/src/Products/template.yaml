@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  ProductsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: Products::Function::FunctionHandler
+      Runtime: dotnet8
+      CodeUri: ./publish
+      MemorySize: 256
+      Timeout: 10
+      Events:
+        GetProducts:
+          Type: Api
+          Properties:
+            Path: /products
+            Method: GET
