@@ -31,13 +31,6 @@ jobs:
           dotnet publish -c Release -r linux-x64 --self-contained false -o publish
         working-directory: lambdas/src/Products
 
-
-      - name: Deploy to Lambda
-        run: |
-          aws lambda update-function-code \
-            --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
-            --zip-file fileb://lambdas/src/Products/ProductsFunction.zip
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -45,8 +38,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Zip Lambda package
+        run: |
+          cd publish
+          zip -r ../ProductsFunction.zip .
+        working-directory: lambdas/src/Products
+
       - name: Deploy to Lambda
         run: |
           aws lambda update-function-code \
             --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
-            --zip-file fileb://ProductsFunction.zip
+            --zip-file fileb://lambdas/src/Products/ProductsFunction.zip
