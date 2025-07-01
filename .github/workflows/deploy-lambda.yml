@@ -1,3 +1,4 @@
+---
 name: Deploy Lambda to AWS
 
 on:
@@ -5,7 +6,7 @@ on:
     branches: [main]
     paths:
       - "lambdas/src/Products/**"
-  workflow_dispatch:
+  workflow_dispatch: true
 
 jobs:
   build-and-deploy:
@@ -22,7 +23,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: "8.x" # Use your project’s version
+          dotnet-version: "8.0"
 
       - name: Install dependencies and publish
         run: |
