@@ -29,11 +29,14 @@ jobs:
         run: |
           dotnet restore
           dotnet publish -c Release -o publish
+        working-directory: lambdas/src/Products
+
 
       - name: Zip Lambda package
         run: |
           cd publish
           zip -r ../ProductsFunction.zip .
+        working-directory: lambdas/src/Products
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
