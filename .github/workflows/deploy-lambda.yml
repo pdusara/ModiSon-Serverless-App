@@ -32,11 +32,11 @@ jobs:
         working-directory: lambdas/src/Products
 
 
-      - name: Zip Lambda package
+      - name: Deploy to Lambda
         run: |
-          cd publish
-          zip -r ../ProductsFunction.zip .
-        working-directory: lambdas/src/Products
+          aws lambda update-function-code \
+            --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
+            --zip-file fileb://lambdas/src/Products/ProductsFunction.zip
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
