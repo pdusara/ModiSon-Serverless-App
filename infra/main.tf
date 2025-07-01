@@ -11,7 +11,8 @@ module "dynamodb-orders" {
 }
 
 module "aws_cognito" {
-  source = "./modules/aws_cognito"
+  source     = "./modules/aws_cognito"
+  aws_region = "us-east-1"
 }
 
 module "s3_bucket" {
@@ -42,6 +43,14 @@ module "products_api" {
   source               = "./modules/api_gateway"
   lambda_invoke_arn    = module.lambda_products.lambda_invoke_arn
   lambda_function_name = module.lambda_products.lambda_function_name
+
+  cognito_client_id     = module.aws_cognito.user_pool_id
+  cognito_user_pool_url = module.aws_cognito.user_pool_domain
+  cognito_issuer        = "https://cognito-idp.us-east-1.amazonaws.com/${module.aws_cognito.user_pool_id}"
+
+  allow_origins = ["https://${module.cloudfront.domain_name}"]
 }
+
+
 
 

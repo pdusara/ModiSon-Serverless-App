@@ -6,10 +6,6 @@ resource "aws_cloudfront_origin_access_control" "modison_oac" {
   signing_protocol                  = "sigv4"
 }
 
-resource "aws_cloudfront_origin_access_identity" "oai" {
-  comment = "OAI for Modison S3"
-}
-
 resource "aws_cloudfront_distribution" "modison_site" {
   origin {
     domain_name = var.s3_bucket_domain

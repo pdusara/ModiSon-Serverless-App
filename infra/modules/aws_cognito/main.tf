@@ -44,8 +44,8 @@ resource "aws_cognito_user_pool_client" "user_pool_client" {
   supported_identity_providers         = ["COGNITO"]
 
   # Authentication Redirect URLs
-  callback_urls = ["https://localhost:7122", "https://your-static-site.com"]
-  logout_urls   = ["https://localhost:7122/logout", "https://your-static-site.com/logout"]
+  callback_urls = ["https://localhost:7122", "https://d1p4pvkzpycf8v.cloudfront.net/Views/Home/Index.html"]
+  logout_urls   = ["https://localhost:7122/logout", "https://d1p4pvkzpycf8v.cloudfront.net/Views/Home/Index.html"]
 }
 
 # Cognito Hosted UI Domain
@@ -53,6 +53,7 @@ resource "aws_cognito_user_pool_domain" "domain" {
   domain       = "modison-auth-domain"
   user_pool_id = aws_cognito_user_pool.user_pool.id
 }
+
 
 # Outputs for Integration
 output "user_pool_id" {
@@ -63,6 +64,7 @@ output "app_client_id" {
   value = aws_cognito_user_pool_client.user_pool_client.id
 }
 
-output "auth_domain" {
-  value = "${aws_cognito_user_pool_domain.domain.domain}.auth.us-east-1.amazoncognito.com"
+
+output "user_pool_domain" {
+  value = "${aws_cognito_user_pool_domain.domain.domain}.auth.${var.aws_region}.amazoncognito.com"
 }
