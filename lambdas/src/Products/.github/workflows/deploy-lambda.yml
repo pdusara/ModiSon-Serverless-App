@@ -2,7 +2,8 @@ name: Deploy Lambda to AWS
 
 on:
   push:
-    branches: [ main ]  # or your deployment branch
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
