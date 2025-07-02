@@ -1,20 +1,26 @@
----
-name: Deploy Lambda to AWS
+name: Deploy Lambdas to AWS
 
 on:
   push:
     branches: [main]
     paths:
-      - "lambdas/src/Products/**"
+      - "lambdas/src/**"
   workflow_dispatch: {}
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        lambda:
+          - name: Products
+            path: lambdas/src/Products
+          - name: Orders
+            path: lambdas/src/Orders
+
     env:
       AWS_REGION: us-east-1
-      LAMBDA_FUNCTION_NAME: Products
 
     steps:
       - name: Checkout code
@@ -29,7 +35,7 @@ jobs:
         run: |
           dotnet restore
           dotnet publish -c Release -r linux-x64 --self-contained false -o publish
-        working-directory: lambdas/src/Products
+        working-directory: ${{ matrix.lambda.path }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -41,11 +47,11 @@ jobs:
       - name: Zip Lambda package
         run: |
           cd publish
-          zip -r ../ProductsFunction.zip .
-        working-directory: lambdas/src/Products
+          zip -r ../${{ matrix.lambda.name }}Function.zip .
+        working-directory: ${{ matrix.lambda.path }}
 
       - name: Deploy to Lambda
         run: |
           aws lambda update-function-code \
-            --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
-            --zip-file fileb://lambdas/src/Products/ProductsFunction.zip
+            --function-name ${{ matrix.lambda.name }} \
+            --zip-file fileb://${{ matrix.lambda.path }}/${{ matrix.lambda.name }}Function.zip

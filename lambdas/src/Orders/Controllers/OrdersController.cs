@@ -22,21 +22,10 @@ public class OrdersController : Controller
         }
         catch (Exception ex)
         {
-            return StatusCode(500, $"Error seeding products: {ex.Message}");
+            return StatusCode(500, $"Error getting orders: {ex.Message}");
         }
 
     }
-
-    // [HttpGet]
-    // public async Task<IActionResult> Create()
-    // {
-    //     var orderViewModel = new OrderViewModel
-    //     {
-    //         Products = await _dynamoDbService.GetProductsAsync() // List of snack names
-    //     };
-
-    //     return View(orderViewModel);
-    // }
 
 
     [HttpPost]
