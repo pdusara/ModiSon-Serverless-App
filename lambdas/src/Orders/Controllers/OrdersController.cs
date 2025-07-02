@@ -31,6 +31,8 @@ public class OrdersController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(OrderViewModel viewModel)
     {
+        Console.WriteLine($"Received: {viewModel.Order.CustomerName}, ItemsJson: {viewModel.ItemsJson}");
+
         if (!ModelState.IsValid)
         {
             return BadRequest("Invalid order data.");

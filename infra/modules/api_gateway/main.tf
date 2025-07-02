@@ -1,11 +1,11 @@
 resource "aws_apigatewayv2_api" "this" {
-  name          = "products-api"
+  name          = var.api_name
   protocol_type = "HTTP"
 
   cors_configuration {
     allow_origins  = var.allow_origins
-    allow_methods  = ["GET", "OPTIONS"]
-    allow_headers  = ["Authorization"]
+    allow_methods  = ["GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS"]
+    allow_headers  = ["Authorization", "Content-Type"]
     expose_headers = []
     max_age        = 3600
   }
@@ -20,12 +20,14 @@ resource "aws_apigatewayv2_integration" "this" {
   payload_format_version = "2.0"
 }
 
-resource "aws_apigatewayv2_route" "products_route" {
-  api_id    = aws_apigatewayv2_api.this.id
-  route_key = "GET /api/products"
-  target    = "integrations/${aws_apigatewayv2_integration.this.id}"
+resource "aws_apigatewayv2_route" "api_routes" {
+  for_each = { for route in var.routes : route.route_key => route }
 
-  authorization_type = "JWT"
+  api_id    = aws_apigatewayv2_api.this.id
+  target    = "integrations/${aws_apigatewayv2_integration.this.id}"
+  route_key = each.value.route_key
+
+  authorization_type = each.value.authorization_type
   authorizer_id      = aws_apigatewayv2_authorizer.cognito_auth.id
 }
 
@@ -33,7 +35,9 @@ resource "aws_apigatewayv2_stage" "default" {
   api_id      = aws_apigatewayv2_api.this.id
   name        = "$default"
   auto_deploy = true
+  description = "last-updated-${timestamp()}" //this will ensure that the stage is updated whenever the configuration changes
 }
+
 
 resource "aws_lambda_permission" "api_gateway" {
   statement_id  = "AllowExecutionFromAPIGateway"
@@ -55,3 +59,4 @@ resource "aws_apigatewayv2_authorizer" "cognito_auth" {
     issuer   = var.cognito_issuer
   }
 }
+

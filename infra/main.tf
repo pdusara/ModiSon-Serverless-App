@@ -39,16 +39,47 @@ module "lambda_products" {
   filename      = "${path.module}/../lambdas/src/Products/ProductsFunction.zip"
 }
 
+module "lambda_orders" {
+  source        = "./modules/lambda/orders"
+  function_name = "Orders"
+  runtime       = "dotnet8"
+  handler       = "Orders::Orders.LambdaEntryPoint::FunctionHandlerAsync"
+  filename      = "${path.module}/../lambdas/src/Orders/OrdersFunction.zip"
+}
+
 module "products_api" {
   source               = "./modules/api_gateway"
+  api_name             = "products-api"
   lambda_invoke_arn    = module.lambda_products.lambda_invoke_arn
   lambda_function_name = module.lambda_products.lambda_function_name
 
-  cognito_client_id     = module.aws_cognito.user_pool_id
+  cognito_client_id     = module.aws_cognito.app_client_id
   cognito_user_pool_url = module.aws_cognito.user_pool_domain
   cognito_issuer        = "https://cognito-idp.us-east-1.amazonaws.com/${module.aws_cognito.user_pool_id}"
 
   allow_origins = ["https://${module.cloudfront.domain_name}"]
+  routes = [
+    { route_key = "GET /api/products", authorization_type = "JWT" }
+  ]
+
+}
+
+module "orders_api" {
+  source               = "./modules/api_gateway"
+  api_name             = "orders-api"
+  lambda_invoke_arn    = module.lambda_orders.lambda_invoke_arn
+  lambda_function_name = module.lambda_orders.lambda_function_name
+
+  cognito_client_id     = module.aws_cognito.app_client_id
+  cognito_user_pool_url = module.aws_cognito.user_pool_domain
+  cognito_issuer        = "https://cognito-idp.us-east-1.amazonaws.com/${module.aws_cognito.user_pool_id}"
+
+  allow_origins = ["https://${module.cloudfront.domain_name}"]
+  routes = [
+    { route_key = "GET /api/orders", authorization_type = "JWT" },
+    { route_key = "POST /api/orders", authorization_type = "JWT" }
+  ]
+
 }
 
 
