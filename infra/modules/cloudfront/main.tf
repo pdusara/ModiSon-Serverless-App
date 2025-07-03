@@ -29,11 +29,16 @@ resource "aws_cloudfront_distribution" "modison_site" {
   }
 
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "S3Origin"
-
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = "S3Origin"
     viewer_protocol_policy = "redirect-to-https"
+
+    min_ttl     = 3600     # Cache objects for at least 1 hour
+    default_ttl = 86400    # Default to 1 day
+    max_ttl     = 31536000 # Cache up to 1 year if not changed
+
+    compress = true # Enable compression for text-based assets
 
     forwarded_values {
       query_string = false
@@ -42,15 +47,7 @@ resource "aws_cloudfront_distribution" "modison_site" {
         forward = "none"
       }
     }
-  }
 
-  dynamic "logging_config" {
-    for_each = var.logging_config == null ? [] : [var.logging_config]
-    content {
-      bucket          = logging_config.value.bucket
-      prefix          = logging_config.value.prefix
-      include_cookies = false
-    }
   }
 }
 

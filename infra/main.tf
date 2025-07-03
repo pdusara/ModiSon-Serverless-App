@@ -24,11 +24,6 @@ module "cloudfront" {
   source           = "./modules/cloudfront"
   s3_bucket_domain = "modison-bucket.s3.amazonaws.com"
   s3_bucket_id     = "modison-bucket"
-
-  logging_config = {
-    bucket = module.s3_bucket.cf_logs_bucket_regional_domain_name
-    prefix = "cf-modison-logs/"
-  }
 }
 
 module "lambda_products" {
@@ -82,6 +77,18 @@ module "orders_api" {
 
 }
 
+module "lambda_log_policy" {
+  source      = "./modules/cloudwatch"
+  policy_name = "lambda-cloudwatch-log-policy"
+}
 
+resource "aws_iam_role_policy_attachment" "products_logging_attach" {
+  role       = module.lambda_products.lambda_role_name
+  policy_arn = module.lambda_log_policy.arn
+}
 
+resource "aws_iam_role_policy_attachment" "orders_logging_attach" {
+  role       = module.lambda_orders.lambda_role_name
+  policy_arn = module.lambda_log_policy.arn
+}
 

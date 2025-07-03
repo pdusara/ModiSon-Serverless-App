@@ -17,7 +17,13 @@ public class OrdersController : Controller
     {
         try
         {
-            var orders = await _dynamoDbService.GetOrdersAsync();
+            var username = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "username")?.Value;
+            if (string.IsNullOrEmpty(username))
+            {
+                return Unauthorized("User is not authenticated.");
+            }
+
+            var orders = await _dynamoDbService.GetOrdersAsync(username.ToString());
             return Ok(orders);
         }
         catch (Exception ex)

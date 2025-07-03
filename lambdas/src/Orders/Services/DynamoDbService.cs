@@ -1,11 +1,12 @@
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
 
 public interface IDynamoDbService
 {
     Task DeleteOrderAsync(string id);
     Task<Order?> GetOrderAsync(string id);
-    Task<List<Order>> GetOrdersAsync();
+    Task<List<Order>> GetOrdersAsync(string? username);
     Task SaveOrderAsync(Order order);
     Task<List<Product>> GetProductsAsync();
     Task SeedProductsAsync();
@@ -27,9 +28,20 @@ public class DynamoDbService : IDynamoDbService
         await _context.SaveAsync(order);
     }
 
-    public async Task<List<Order>> GetOrdersAsync()
+    public async Task<List<Order>> GetOrdersAsync(string? username)
     {
-        return await _context.ScanAsync<Order>(new List<ScanCondition>()).GetRemainingAsync();
+        // If username is provided, filter orders by username
+        if (!string.IsNullOrEmpty(username))
+        {
+            var conditions = new List<ScanCondition>
+            {
+                new ScanCondition("Username", ScanOperator.Equal, username)
+            };
+            var orders = await _context.ScanAsync<Order>(conditions).GetRemainingAsync();
+            return orders.OrderByDescending(o => o.OrderDate).ToList();
+        }
+
+        return new List<Order>(); // Return an empty list if no username is provided
     }
 
     public async Task<Order?> GetOrderAsync(string id)
